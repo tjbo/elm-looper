@@ -1,0 +1,143 @@
+var _user$project$Main$update = F2(
+	function (action, model) {
+		var _p0 = action;
+		switch (_p0.ctor) {
+			case 'Play':
+				return A2(
+					_elm_lang$core$Debug$log,
+					'Playing',
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							playing: _elm_lang$core$Basics$not(model.playing)
+						}));
+			case 'UpdateNote':
+				var updateNote = F2(
+					function (ix, note) {
+						return _elm_lang$core$Native_Utils.eq(ix, _p0._0) ? _elm_lang$core$Native_Utils.update(
+							note,
+							{
+								state: _elm_lang$core$Basics$not(_p0._1)
+							}) : note;
+					});
+				return A2(
+					_elm_lang$core$Debug$log,
+					'UpdateNote',
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							nodes: A2(_elm_lang$core$List$indexedMap, updateNote, model.nodes)
+						}));
+			default:
+				var newInt = A2(
+					_elm_lang$core$Result$withDefault,
+					0,
+					_elm_lang$core$String$toInt(_p0._0));
+				return A2(
+					_elm_lang$core$Debug$log,
+					'CalculateGrid',
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							nodes: A2(
+								_elm_lang$core$List$repeat,
+								newInt,
+								{state: false})
+						}));
+		}
+	});
+var _user$project$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {state: a, beats: b, playing: c, uid: d, nodes: e};
+	});
+var _user$project$Main$Track = function (a) {
+	return {nodes: a};
+};
+var _user$project$Main$Note = function (a) {
+	return {state: a};
+};
+var _user$project$Main$model = A5(
+	_user$project$Main$Model,
+	false,
+	0,
+	false,
+	0,
+	A2(
+		_elm_lang$core$List$repeat,
+		8,
+		_user$project$Main$Note(false)));
+var _user$project$Main$UpdateNote = F2(
+	function (a, b) {
+		return {ctor: 'UpdateNote', _0: a, _1: b};
+	});
+var _user$project$Main$renderNode = F2(
+	function (i, note) {
+		return A2(
+			_elm_lang$html$Html$li,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('node')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$button,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Events$onClick(
+							A2(_user$project$Main$UpdateNote, i, note.state))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(note.state))
+						]))
+				]));
+	});
+var _user$project$Main$renderNodes = function (nodes) {
+	var nodeList = A2(_elm_lang$core$List$indexedMap, _user$project$Main$renderNode, nodes);
+	return A2(
+		_elm_lang$html$Html$ul,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('grid')
+			]),
+		nodeList);
+};
+var _user$project$Main$Play = {ctor: 'Play'};
+var _user$project$Main$CalculateGrid = function (a) {
+	return {ctor: 'CalculateGrid', _0: a};
+};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Main$Play)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Play')
+					])),
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$placeholder('# of nodes'),
+						_elm_lang$html$Html_Events$onInput(_user$project$Main$CalculateGrid)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_user$project$Main$renderNodes(model.nodes)
+			]));
+};
+var _user$project$Main$main = {
+	main: _elm_lang$html$Html_App$beginnerProgram(
+		{model: _user$project$Main$model, update: _user$project$Main$update, view: _user$project$Main$view})
+};
